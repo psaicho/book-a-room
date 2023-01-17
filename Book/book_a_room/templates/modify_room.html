@@ -1,0 +1,19 @@
+{% extends './base.html' %}
+{% block content %}
+  {%if request.method == 'GET' %}
+  <form method="POST">{%csrf_token%}
+    <label for="name">Room Name: {{romm.id}}</label>
+    <input type="text" name="name" id="name" value="{{room.name}}"><br><br>
+    <label for="capacity">Capacity: </label>
+    <input type="number" min="1" step="1"   name="capacity"
+           id="capacity" value="{{room.capacity}}"><br><br>
+    <label for="projector_a">projector availability: </label>
+    {% if room.projector_availability == True %}
+    <input type="checkbox" name="projector_a" id="projector_a" checked><br><br>
+    {% else%}
+    <input type="checkbox" name="projector_a" id="projector_a" ><br><br>
+    {% endif %}
+    <input type="submit" value="Save">
+  </form>
+  {% endif %}
+  {% endblock %}

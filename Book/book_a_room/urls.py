@@ -2,6 +2,7 @@ from django.urls import path, re_path
 from book_a_room import views
 
 urlpatterns = [
+    path('room/<int:id>/', views.RoomDetails.as_view(), name='room_details'),
     path('room/new/', views.AddRoom.as_view(), name='add_room'),
     path('rooms/', views.AllRooms.as_view(), name='rooms'),
     path('room/delete/<int:id>/', views.DeleteRoom.as_view(), name='delete_room'),

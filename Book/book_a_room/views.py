@@ -8,12 +8,15 @@ from datetime import date, datetime
 
 
 
+
 # Create your views here.
 class AddRoom(views.View):
     def get(self, request):
+        rooms = Room.objects.all()
         return render(
             request,
-            'add_room.html'
+            'add_room.html',
+            context={'room': room}
         )
 
     def post(self, request):
@@ -47,6 +50,9 @@ class AddRoom(views.View):
 class AllRooms(views.View):
     def get(self, request):
         rooms = Room.objects.all()
+        for room in rooms:
+            reservation_dates = [reservation.date for reservation in room.roomreservation_set.all()]
+            room.reserved = date.today() in reservation_dates
         return render(
             request,
             'rooms.html',
@@ -89,14 +95,32 @@ class ModifyRoom(views.View):
 
         return HttpResponseRedirect(reverse('rooms'))
 
-class ReserveRomm(views.View):
+def room_by_id(id: int):
+    room = Room.objects.get(id=id)
+    room.reservation_gt_today \
+        = [reservation.date for reservation in
+           room.roomreservation_set.filter(date__gt=date.today())]
+    return room
 
+
+class RoomDetails(views.View):
+    def get(self,request,id):
+        # room = Room.objects.get(id=id)
+        # room.reservation_gt_today \
+        #     = [reservation.date for reservation in
+        #        room.roomreservation_set.filter(date__gt=date.today())]
+        return render(
+            request,
+            'room.html',
+            context={'room': room_by_id(id)}
+        )
+
+class ReserveRomm(views.View):
     def get(self, request, id):
-        room = Room.objects.get(id=id)
         return render(
             request,
             'reserve_room.html',
-            context={'room': room}
+            context={'room': room_by_id(id)}
         )
 
     def post(self, request, id):
@@ -114,7 +138,6 @@ class ReserveRomm(views.View):
         else:
             RoomReservation.objects.create(date=date_r, room_id=room, comment=comment)
             return HttpResponseRedirect(reverse('rooms'))
-
 
 
 

@@ -1,0 +1,8 @@
+{% extends './base.html' %}
+{% block content %}
+<h3>Room Name: {{room.name}}</h3>
+<p>Room id: {{room.id}}</p>
+<p>Projector id: {{room.projector_availability}}</p>
+{% include "reservation_list.html" %}
+{% endblock %}
+

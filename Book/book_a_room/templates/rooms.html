@@ -8,6 +8,7 @@
       <th scope="col" class="col-2">Name</th>
       <th scope="col" class="col-1">Capacity</th>
       <th scope="col" class="col-5" colspan="4">Projector Availability</th>
+      <th scope="col" class="col-5" colspan="4">Conference Room Availability</th>
     </tr>
   </thead>
   <tbody>
@@ -23,6 +24,13 @@
       {% else %}
         <td class="col-2" style="color:red;">&#9746;</td>
       {% endif %}
+<!--      room availability-->
+      {% if room.reserved %}
+        <td class="col-2" style="color:green;">&#9745;</td>
+      {% else %}
+        <td class="col-2" style="color:red;">&#9746;</td>
+      {% endif %}
+<!--   end room availability   -->
       <td class="col-1">
         <a href="{% url 'modify_room' id=room.id %}/">edytuj</a>
       </td>

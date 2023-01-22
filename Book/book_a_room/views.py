@@ -5,6 +5,7 @@ from django import views
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from datetime import date, datetime
+from django.views.generic.base import TemplateView
 
 
 
@@ -99,7 +100,7 @@ def room_by_id(id: int):
     room = Room.objects.get(id=id)
     room.reservation_gt_today \
         = [reservation.date for reservation in
-           room.roomreservation_set.filter(date__gt=date.today())]
+           room.roomreservation_set.filter(date__gt=date.today()).order_by('date')]
     return room
 
 
@@ -138,6 +139,9 @@ class ReserveRomm(views.View):
         else:
             RoomReservation.objects.create(date=date_r, room_id=room, comment=comment)
             return HttpResponseRedirect(reverse('rooms'))
+
+
+
 
 
 

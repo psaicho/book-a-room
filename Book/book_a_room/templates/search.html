@@ -1,0 +1,44 @@
+
+
+<form method="GET">
+
+  <h3>Search Conferece Room:</h3>
+  <label for="search_start_date">Start date:</label>
+  <input type="date" id="search_start_date" name="search_start_date" value="{{today}}" min="{{today}}" max="">
+  <label for="search_start_end">End date:</label>
+  <input type="date" id="search_start_end" name="search_start_end" value="" min="{{today}}"  max="">
+  <label for="search_name">Name:</label>
+  <select name="search_name" id="search_name">
+    {% for room in crooms %}
+  <option value="{{crooms.id}}">{{room.name}}</option>
+    {% endfor%}
+  </select>
+  <label for="serch_capacity">Capacity:</label>
+  <input type="number" id="serch_capacity" name="serch_capacity" value="1" min="1" max="{{crooms.capacity_max}}">
+  <input type="submit" value="Search" >
+
+
+</form><br><br>
+
+ <script>
+
+     const date = new Date(Date.now());
+     date.setMonth(date.getMonth() + 0);
+     document.querySelector("#end").valueAsDate = date;
+     let today = new Date();
+     let dd = today.getDate();
+     let mm = today.getMonth() + 2; //January is 0!
+     let yyyy = today.getFullYear();
+        if (dd < 10) {
+           dd = '0' + dd;
+        }
+
+        if (mm < 10) {
+           mm = '0' + mm;
+        }
+
+    today = yyyy + '-' + mm + '-' + dd;
+    document.querySelector("#search_start_end").setAttribute("max", today);
+    document.querySelector("#search_start_date").setAttribute("max", today);
+
+  </script>

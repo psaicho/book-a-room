@@ -9,6 +9,7 @@ urlpatterns = [
     path('room/delete/<int:id>/', views.DeleteRoom.as_view(), name='delete_room'),
     re_path(r'room/modify/(?P<id>[0-9]+)/', views.ModifyRoom.as_view(), name='modify_room'),
     path('room/reserve/<int:id>/', views.ReserveRomm.as_view(), name='reserve_room'),
+    path('room/search-results/', views.SearchResults.as_view(), name='search_results'),
 
 
 ]

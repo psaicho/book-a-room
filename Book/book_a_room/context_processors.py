@@ -10,8 +10,4 @@ def rooms_processor(request):
         'today': datetime.today().strftime("%Y-%m-%d"),
     }
 
-def get_data_search(request):
-    serch_capacity = request.GET.get('serch_capacity')
-    return render(
 
-    )

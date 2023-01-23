@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search result</title>
+</head>
+<body>
+    {% for room in rooms%}
+    Name: {{room.id}}:{{room.name}}<br>
+    Capacity: {{room.capacity}}<br>
+    Projektor:
+    {% if room.projector_availability == True%}
+    Yes
+    {%else %}
+    No
+    {% endif%}
+    <br>___________________________<br>
+    {% endfor %}
+</body>
+</html>

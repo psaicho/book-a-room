@@ -1,20 +1,21 @@
 
 
-<form method="GET">
+<form method="GET" action="{% url 'search_results' %}">
 
   <h3>Search Conferece Room:</h3>
-  <label for="search_start_date">Start date:</label>
-  <input type="date" id="search_start_date" name="search_start_date" value="{{today}}" min="{{today}}" max="">
-  <label for="search_start_end">End date:</label>
-  <input type="date" id="search_start_end" name="search_start_end" value="" min="{{today}}"  max="">
-  <label for="search_name">Name:</label>
-  <select name="search_name" id="search_name">
+  <label for="search_date">Start date:</label>
+  <input type="date" id="search_date" name="search_date" value="{{today}}" min="{{today}}" max="">
+  <label for="search_id">Name:</label>
+  <select name="search_id" id="search_id">
+    <option value="">None</option>
     {% for room in crooms %}
-  <option value="{{crooms.id}}">{{room.name}}</option>
+  <option value="{{room.id}}">{{room.name}}</option>
     {% endfor%}
   </select>
-  <label for="serch_capacity">Capacity:</label>
-  <input type="number" id="serch_capacity" name="serch_capacity" value="1" min="1" max="{{crooms.capacity_max}}">
+  <label for="search_capacity">Capacity:</label>
+  <input type="number" id="search_capacity" name="search_capacity" value="1" min="1" max="{{crooms.capacity_max}}">
+  <label for="search_projector">Projector:</label>
+  <input type="checkbox" id="search_projector" name="search_projector" checked>
   <input type="submit" value="Search" >
 
 
@@ -38,7 +39,7 @@
         }
 
     today = yyyy + '-' + mm + '-' + dd;
-    document.querySelector("#search_start_end").setAttribute("max", today);
-    document.querySelector("#search_start_date").setAttribute("max", today);
+    document.querySelector("#search_date").setAttribute("max", today);
+
 
   </script>

@@ -1,13 +1,12 @@
-from book_a_room.models import Room, RoomReservation
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render, redirect, reverse
-from django import views
-from django.shortcuts import get_object_or_404
-from django.urls import reverse
 from datetime import date, datetime
-from django.views.generic.base import TemplateView
 
-
+from book_a_room.models import Room, RoomReservation
+from django import views
+from django.db.models import Q
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
+from django.urls import reverse
 
 
 # Create your views here.
@@ -26,17 +25,17 @@ class AddRoom(views.View):
         capacity = request.POST.get('capacity')
         projector_a = True if request.POST.get('projector_a') == 'on' else False
 
-        #change the letter size in name variable
+        # change the letter size in name variable
         print(type(name))
 
-        #validation
+        # validation
         if name != '' and capacity.isnumeric():
             info = 'Romm has been added to the dataBase'
             name = name.title()
             # Add room to the DataBase
             Room.objects.update_or_create(
                 name=name,
-                defaults={'name': name, 'capacity': capacity, 'projector_availability':projector_a},
+                defaults={'name': name, 'capacity': capacity, 'projector_availability': projector_a},
             )
             return HttpResponseRedirect(reverse('rooms'))
         else:
@@ -47,6 +46,7 @@ class AddRoom(views.View):
                 'add_room.html',
                 context={'info': info}
             )
+
 
 class AllRooms(views.View):
     def get(self, request):
@@ -60,6 +60,7 @@ class AllRooms(views.View):
             context={'rooms': rooms}
         )
 
+
 class DeleteRoom(views.View):
 
     def get(self, request, id):
@@ -71,6 +72,7 @@ class DeleteRoom(views.View):
 
         )
 
+
 class ModifyRoom(views.View):
     def get(self, request, id):
         room = get_object_or_404(Room, id=id)
@@ -79,6 +81,7 @@ class ModifyRoom(views.View):
             'modify_room.html',
             context={'room': room}
         )
+
     def post(self, request, id):
         # get value from form
         name = str(request.POST.get('name'))
@@ -96,6 +99,7 @@ class ModifyRoom(views.View):
 
         return HttpResponseRedirect(reverse('rooms'))
 
+
 def room_by_id(id: int):
     room = Room.objects.get(id=id)
     room.reservation_gt_today \
@@ -105,7 +109,7 @@ def room_by_id(id: int):
 
 
 class RoomDetails(views.View):
-    def get(self,request,id):
+    def get(self, request, id):
         # room = Room.objects.get(id=id)
         # room.reservation_gt_today \
         #     = [reservation.date for reservation in
@@ -115,6 +119,7 @@ class RoomDetails(views.View):
             'room.html',
             context={'room': room_by_id(id)}
         )
+
 
 class ReserveRomm(views.View):
     def get(self, request, id):
@@ -141,8 +146,21 @@ class ReserveRomm(views.View):
             return HttpResponseRedirect(reverse('rooms'))
 
 
+class SearchResults(views.View):
+    def get(self, request):
+        date = request.GET.get('search_date')
+        print(date)
 
-
-
-
-
+        projector = True if request.GET.get('search_projector') == 'on' else False
+        id = request.GET.get('search_id')
+        capacity = request.GET.get('search_capacity')
+        print(RoomReservation.objects.filter(date=date).values_list('id'))
+        rooms = Room.objects.filter(
+                                    (Q(capacity__gt=capacity)
+                                     and Q(projector_availability=projector))
+                                    ).exclude(id__in=RoomReservation.objects.filter(date=date).values_list('room_id'))
+        return render(
+            request,
+            'search_result.html',
+            context={'rooms': rooms}
+        )

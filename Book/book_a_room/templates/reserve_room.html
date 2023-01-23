@@ -3,10 +3,11 @@
 {{info}}
 <form action="" method="POST">{% csrf_token%}
     <label for="date">Reservation date:</label>
-    <input value="" type="date"  placeholder="Reservation date" id="date" name="date"><br><br>
+    <input value="" type="date"  placeholder="Reservation date" id="date" name="date" value="{{today}}"><br><br>
     <label for="comment">Comment:</label>
     <input value="" type="text" placeholder="Reservation date" id="comment" name="comment"><br><br>
     <input type="submit" value="Add reservation">
 </form>
+
 {% include "reservation_list.html" %}
 {% endblock %}
